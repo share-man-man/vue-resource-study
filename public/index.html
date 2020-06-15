@@ -25,11 +25,11 @@
         },
         // 1。实现一个解析起，可以解析html模版=> ast语法树 可以用一个树结构来描述
         // 2。虚拟节点是描述dom的，是使用对象来描述html的；ast语法树是描述语法的，这里将html本身变成js语法
-        template: `<div style="height: 200px" name="abc" value><span>123</span><a>{{msg}}</a></div>`
+        template: `<div style="height: 200px" name="abc" value>aaaaaaa<span>123<div><p style="color: red"></p></div></span>bbbbbbbb<a>{{msg}}</a>ccccccc</div>`
 
     })
     vm._data.array.push({age: 3})
-    console.log(vm)
+    // console.log(vm)
 </script>
 </body>
 </html>

@@ -9,18 +9,74 @@ const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g; //匹配插值表达式里的�
 export function parseHtml(html) {
     // 根据html解析成树结构 <div a="1"></div>
 
+    // 树根
+    let root;
+    // 当前标签
+    let currentParent;
+    // 标签栈，判断标签是否闭合
+    let stack = [];
+
+    // 创建ast语法树
+    function createASTHtml(tagName, attrs) {
+        return {
+            tag: tagName,
+            attrs,
+            children: [],
+            parent: null,
+            type: 1 // 1：普通标签  3：文本
+        }
+    }
+
+    // 开始标签
+    function start(tagName, attrs) {
+        // console.log(tagName, attrs)
+        let element = createASTHtml(tagName, attrs)
+        // 如果没有根节点，那么将该节点设为根节点
+        if (!root) {
+            root = element
+        }
+        currentParent = element
+        stack.push(element)
+    }
+
+    // 结束标签
+    function end(tagName) {
+        // console.log(tagName)
+        // 删除栈中的开始标签
+        let element = stack.pop();
+        let parent = stack[stack.length-1];
+        if(parent){
+            element.parent = parent;
+            parent.children.push(element);
+            // 标签结束后，修改当前父节点
+            currentParent = parent
+        }
+    }
+
+    // 文本
+    function chars(text) {
+        text = text.replace(/\s/g, '');
+        if (text) {
+            currentParent.children.push({
+                type: 3,
+                text
+            })
+        }
+    }
+
     while (html) {
         let textEnd = html.indexOf('<');
+
         // 匹配标签
         if (textEnd == 0) {
+            // 开始标签
             const startTagMatch = parseStartTag();
-
-            // 结束标签
             if (startTagMatch) {
-                // 开始标签
-                // console.log(startTagMatch)
+                // advance(startTagMatch[0].length)
                 start(startTagMatch.tagName, startTagMatch.attrs)
             }
+
+            // 结束标签
             const endTagMatch = html.match(endTag)
             if (endTagMatch) {
                 advance(endTagMatch[0].length)
@@ -39,25 +95,12 @@ export function parseHtml(html) {
         }
     }
 
-    function start(tagName, attrs) {
-        console.log(tagName,attrs)
-    }
-
-    function end(tagName) {
-        console.log(tagName)
-    }
-
-    function chars(text) {
-        console.log(text)
-    }
-
-
     // 截取html模版字符串
     function advance(n) {
         html = html.substring(n);
     }
 
-    //
+    // 开始标签
     function parseStartTag() {
         const start = html.match(startTagOpen);
         if (start) {
@@ -80,4 +123,6 @@ export function parseHtml(html) {
             }
         }
     }
+
+    return root;
 }
