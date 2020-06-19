@@ -5,7 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-<div id="app"></div>
+<!--<div id="app"></div>-->
+<div id="app" style="height: 400px;color: gray" name="abc" value="123">aaaaaaa<span>this is{{name}}-{{deepObj}} !!<div><p style="color: red">span标签</p></div></span>bbbbbbbb<a>talk:{{msg}}</a>ccccccc</div>
 <script src="../dist/vue.js"></script>
 <script>
     const vm = new Vue({
@@ -25,7 +26,7 @@
         },
         // 1。实现一个解析起，可以解析html模版=> ast语法树 可以用一个树结构来描述
         // 2。虚拟节点是描述dom的，是使用对象来描述html的；ast语法树是描述语法的，这里将html本身变成js语法
-        template: `<div style="height: 200px" name="abc" value>aaaaaaa<span>123<div><p style="color: red"></p></div></span>bbbbbbbb<a>{{msg}}</a>ccccccc</div>`
+        // template: `<div style="height: 400px;color: gray" name="abc" value="123">aaaaaaa<span>this is{{name}}-{{deepObj}} !!<div><p style="color: red">span标签</p></div></span>bbbbbbbb<a>talk:{{msg}}</a>ccccccc</div>`
 
     })
     vm._data.array.push({age: 3})
