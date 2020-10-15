@@ -1,5 +1,6 @@
 import {isObject} from "../util";
 import {arrayMethods} from "./array";
+import Dep from "./dep";
 
 //es6的类
 class Observer {
@@ -38,9 +39,11 @@ function defineReactive(data, key, value) {
     // 如果传入的值还是一个对象，进行递归监测
     observer(value)
 
+    let dep = new Dep()
     // 监测对象
     Object.defineProperty(data, key, {
         get() {
+            //
             return value;
         },
         set(newValue) {

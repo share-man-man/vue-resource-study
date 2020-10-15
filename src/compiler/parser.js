@@ -44,12 +44,12 @@ export function parseHtml(html) {
         // console.log(tagName)
         // 删除栈中的开始标签
         let element = stack.pop();
-        let parent = stack[stack.length-1];
-        if(parent){
-            element.parent = parent;
-            parent.children.push(element);
+        currentParent = stack[stack.length-1];
+        if(currentParent){
+            element.parent = currentParent;
+            currentParent.children.push(element);
             // 标签结束后，修改当前父节点
-            currentParent = parent
+            // currentParent = parent
         }
     }
 
